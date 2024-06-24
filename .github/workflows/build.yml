@@ -45,6 +45,8 @@ jobs:
       with:
         name: clang
         path: pkg/dist
-    - run: npm publish
+    - run: |
+        cd pkg
+        npm publish
       env:
         NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
