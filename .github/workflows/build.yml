@@ -1,0 +1,22 @@
+name: build 
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: make
+      run: ./build.sh
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v4
+      with:
+        name: clangd
+        path: pkg/dist
