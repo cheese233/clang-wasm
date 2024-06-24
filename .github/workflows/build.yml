@@ -8,9 +8,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: prepare
@@ -28,5 +26,25 @@ jobs:
     - name: Archive dists
       uses: actions/upload-artifact@v4
       with:
-        name: clangd
+        name: clang
         path: pkg/dist
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        registry-url: https://npm.pkg.github.com/
+    - name: Download dists
+      uses: actions/download-artifact@v4
+      with:
+        name: clang
+        path: pkg/dist
+    - run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
