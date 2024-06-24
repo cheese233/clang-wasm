@@ -21,10 +21,10 @@ jobs:
         cd emsdk
         ./emsdk install latest
         ./emsdk activate latest
-        source "./emsdk_env.sh"
-        cd ..
     - name: make
-      run: ./build.sh
+      run: |
+        source ./emsdk/emsdk_env.sh
+        ./build.sh
     - name: Archive dists
       uses: actions/upload-artifact@v4
       with:
