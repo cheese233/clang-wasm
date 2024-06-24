@@ -18,8 +18,10 @@ jobs:
         sudo apt update
         sudo apt install -y ninja-build
         git clone https://github.com/emscripten-core/emsdk.git
+        cd emsdk
         ./emsdk install latest
         ./emsdk activate latest
+        cd ..
     - name: make
       run: ./build.sh
     - name: Archive dists
