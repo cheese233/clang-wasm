@@ -13,9 +13,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: prepare
+      run: |
+        apt update
+        apt install -y ninja-build
+        git clone https://github.com/emscripten-core/emsdk.git
+        ./emsdk install latest
+        ./emsdk activate latest
     - name: make
       run: ./build.sh
-    - name: Archive code coverage results
+    - name: Archive dists
       uses: actions/upload-artifact@v4
       with:
         name: clangd
