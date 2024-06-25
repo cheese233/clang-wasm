@@ -63,6 +63,7 @@ jobs:
       - name: Download builds
         uses: actions/download-artifact@v4
         with:
+          name: build-llvm
           path: build.tzst
       - run: /usr/bin/tar -xf build.tzst -P -C build --use-compress-program unzstd
       - name: make
@@ -85,6 +86,7 @@ jobs:
     - name: Download dists
       uses: actions/download-artifact@v4
       with:
+        pattern: out-*
         path: pkg/dist
     - uses: JS-DevTools/npm-publish@v3.1.1
       with:
