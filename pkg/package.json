@@ -1,5 +1,5 @@
 {
-  "name": "clang-wasm",
+  "name": "@cheese233/clang-wasm",
   "version": "15.0.7",
   "files": [
     "dist"
@@ -14,5 +14,8 @@
     "url": "https://github.com/cheese233/clang-wasm/issues"
   },
   "homepage": "https://github.com/cheese233/clang-wasm#readme",
-  "description": ""
+  "description": "",
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com/"
+  }
 }
