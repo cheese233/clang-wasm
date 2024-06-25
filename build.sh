@@ -42,7 +42,7 @@ if [ "$1" == "clangd" ]; then
         -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache \
         -DCMAKE_BUILD_TYPE=Release \
         -DLLVM_TARGETS_TO_BUILD="" \
-        -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" \
+        -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra" \
         -DLLVM_ENABLE_DUMP=OFF \
         -DLLVM_ENABLE_ASSERTIONS=OFF \
         -DLLVM_ENABLE_EXPENSIVE_CHECKS=OFF \
@@ -73,7 +73,7 @@ elif [ "$1" == "clang" ]; then
         -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache \
         -DCMAKE_BUILD_TYPE=Release \
         -DLLVM_TARGETS_TO_BUILD="" \
-        -DLLVM_ENABLE_PROJECTS="clang;lld" \
+        -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra" \
         -DLLVM_ENABLE_DUMP=OFF \
         -DLLVM_ENABLE_ASSERTIONS=OFF \
         -DLLVM_ENABLE_EXPENSIVE_CHECKS=OFF \
