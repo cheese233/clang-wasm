@@ -9,7 +9,7 @@ jobs:
       strategy:
         matrix:
           build_package: [clangd, clang]
-      runs-on: ubuntu-latest
+      runs-on: ubuntu-20.04
       steps:
       - uses: actions/checkout@v4
       - name: prepare
@@ -24,7 +24,6 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 250M
-          key: ${{ runner.os }}-${{ matrix.build_package }}
       - name: make
         run: |
           source ./emsdk/emsdk_env.sh
