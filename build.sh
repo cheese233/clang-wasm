@@ -24,7 +24,7 @@ if [ ! -d $LLVM_NATIVE/ ]; then
         -DLLVM_ENABLE_PROJECTS="lld;clang"
 fi
 cmake --build $LLVM_NATIVE -- llvm-tblgen clang-tblgen
-if [$1 == "clangd"]; then
+if ["$1" == "clangd"]; then
     CXXFLAGS="-Dwait4=__syscall_wait4 -pthread" \
     LDFLAGS="\
         -s LLD_REPORT_UNDEFINED=1 \
@@ -55,7 +55,7 @@ if [$1 == "clangd"]; then
         -DCLANG_TABLEGEN=$LLVM_NATIVE/bin/clang-tblgen
     
     cmake --build $LLVM_BUILD --target clangd -j12
-elif [$1 == "clang"]; then
+elif ["$1" == "clang"]; then
     CXXFLAGS="-Dwait4=__syscall_wait4 -pthread" \
     LDFLAGS="\
         -s LLD_REPORT_UNDEFINED=1 \
