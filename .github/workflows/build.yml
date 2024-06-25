@@ -30,7 +30,7 @@ jobs:
           source ./emsdk/emsdk_env.sh
           ./build.sh prepare
       - name: pack
-        run: tar --posix -cf build.tzst -P -C ./build --use-compress-program zstdmt
+        run: tar --posix -cf build.tzst -P -c build --use-compress-program zstdmt
       - name: Archive dists
         uses: actions/upload-artifact@v4
         with:
@@ -65,7 +65,7 @@ jobs:
         with:
           name: build-llvm
           path: build.tzst
-      - run: /usr/bin/tar -xf build.tzst -P -C build --use-compress-program unzstd
+      - run: tar -xf build.tzst -P -C . --use-compress-program unzstd
       - name: make
         run: |
           source ./emsdk/emsdk_env.sh
