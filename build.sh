@@ -25,8 +25,9 @@ if [ ! -d $LLVM_NATIVE/ ]; then
         -DLLVM_TARGETS_TO_BUILD=WebAssembly \
         -DLLVM_ENABLE_PROJECTS="lld;clang"
 fi
+cmake --build $LLVM_NATIVE -- llvm-tblgen clang-tblgen
 if [ "$1" == "prepare" ]; then
-    cmake --build $LLVM_NATIVE -- llvm-tblgen clang-tblgen
+
     CXXFLAGS="-Dwait4=__syscall_wait4 -pthread" \
     LDFLAGS="\
         -s LLD_REPORT_UNDEFINED=1 \
