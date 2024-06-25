@@ -54,7 +54,7 @@ if [ "$1" == "clangd" ]; then
         -DLLVM_TABLEGEN=$LLVM_NATIVE/bin/llvm-tblgen \
         -DCLANG_TABLEGEN=$LLVM_NATIVE/bin/clang-tblgen
     
-    cmake --build $LLVM_BUILD --target clangd -j12
+    cmake --build $LLVM_BUILD --target clangd
 elif [ "$1" == "clang" ]; then
     CXXFLAGS="-Dwait4=__syscall_wait4 -pthread" \
     LDFLAGS="\
@@ -85,7 +85,7 @@ elif [ "$1" == "clang" ]; then
         -DLLVM_TABLEGEN=$LLVM_NATIVE/bin/llvm-tblgen \
         -DCLANG_TABLEGEN=$LLVM_NATIVE/bin/clang-tblgen
     
-    cmake --build $LLVM_BUILD --target clang -j12
+    cmake --build $LLVM_BUILD --target clang
 fi
 
 rm -rf pkg/dist
