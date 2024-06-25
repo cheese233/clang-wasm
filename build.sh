@@ -19,6 +19,7 @@ if [ ! -d $LLVM_NATIVE/ ]; then
     cmake -G Ninja \
         -S $LLVM_SRC/llvm/ \
         -B $LLVM_NATIVE/ \
+        -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache \
         -DCMAKE_BUILD_TYPE=Release \
         -DLLVM_TARGETS_TO_BUILD=WebAssembly \
         -DLLVM_ENABLE_PROJECTS="lld;clang"
