@@ -47,15 +47,11 @@ jobs:
       - name: Set Swap Space
         uses: pierotofy/set-swap-space@master
         with:
-          swap-size-gb: 8
+          swap-size-gb: 10
       - name: prepare
         run: |
           sudo apt update
           sudo apt install -y ninja-build
-          git clone https://github.com/emscripten-core/emsdk.git
-          cd emsdk
-          ./emsdk install latest
-          ./emsdk activate latest
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:

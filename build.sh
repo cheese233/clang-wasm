@@ -7,14 +7,15 @@ LLVM_SRC=$TOP_LEVEL/llvm-project
 LLVM_BUILD=$TOP_LEVEL/build
 LLVM_NATIVE=$TOP_LEVEL/build-native
 
-if [ ! -d $LLVM_SRC/ ]; then 
-    git clone https://github.com/llvm/llvm-project --depth=1 "$LLVM_SRC" --branch "llvmorg-15.0.7" --single-branch
-
-    pushd $LLVM_SRC
-    git apply $TOP_LEVEL/llvm-project.patch
-    popd
-fi
 if [ "$1" == "prepare" ]; then
+    if [ ! -d $LLVM_SRC/ ]; then 
+        git clone https://github.com/llvm/llvm-project --depth=1 "$LLVM_SRC" --branch "llvmorg-15.0.7" --single-branch
+
+        pushd $LLVM_SRC
+        git apply $TOP_LEVEL/llvm-project.patch
+        popd
+    fi
+
     if [ ! -d $LLVM_NATIVE/ ]; then
         cmake -G Ninja \
             -S $LLVM_SRC/llvm/ \
@@ -55,9 +56,9 @@ if [ "$1" == "prepare" ]; then
         -DLLVM_TABLEGEN=$LLVM_NATIVE/bin/llvm-tblgen \
         -DCLANG_TABLEGEN=$LLVM_NATIVE/bin/clang-tblgen
 elif [ "$1" == "clangd" ]; then
-    cmake --build $LLVM_BUILD --target clangd -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
+    cmake --build $LLVM_BUILD --target clangd
 elif [ "$1" == "clang" ]; then
-    cmake --build $LLVM_BUILD --target clang -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
+    cmake --build $LLVM_BUILD --target clang
 fi
 
 rm -rf pkg/dist
