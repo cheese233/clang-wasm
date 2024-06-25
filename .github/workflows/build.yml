@@ -63,9 +63,7 @@ jobs:
           name: build-llvm
           path: build
       - name: make
-        run: |
-          source ./emsdk/emsdk_env.sh
-          ./build.sh ${{ matrix.build_package }}
+        run: ./build.sh ${{ matrix.build_package }}
       - name: Archive dists
         uses: actions/upload-artifact@v4
         with:
