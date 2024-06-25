@@ -5,7 +5,39 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 jobs:
+  build-llvm:
+      runs-on: ubuntu-20.04
+      steps:
+      - uses: actions/checkout@v4
+      - name: Set Swap Space
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 8
+      - name: prepare
+        run: |
+          sudo apt update
+          sudo apt install -y ninja-build
+          git clone https://github.com/emscripten-core/emsdk.git
+          cd emsdk
+          ./emsdk install latest
+          ./emsdk activate latest
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 500M
+      - name: make
+        run: |
+          source ./emsdk/emsdk_env.sh
+          ./build.sh prepare
+      - name: pack
+        run: tar --posix -cf build.tzst -P -C ./build --use-compress-program zstdmt
+      - name: Archive dists
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-llvm
+          path: build.tzst
   builds:
+      needs: build-llvm
       strategy:
         matrix:
           build_package: [clangd, clang]
@@ -27,7 +59,13 @@ jobs:
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          max-size: 250M
+          max-size: 500M
+      - name: Download builds
+        uses: actions/download-artifact@v4
+        with:
+          name: build-llvm
+          path: build.tzst
+      - run: /usr/bin/tar -xf build.tzst -P -C build --use-compress-program unzstd
       - name: make
         run: |
           source ./emsdk/emsdk_env.sh
@@ -35,7 +73,7 @@ jobs:
       - name: Archive dists
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.build_package }}
+          name: out-${{ matrix.build_package }}
           path: pkg/dist
   publish:
     needs: builds
@@ -48,6 +86,7 @@ jobs:
     - name: Download dists
       uses: actions/download-artifact@v4
       with:
+        pattern: out-*
         path: pkg/dist
     - uses: JS-DevTools/npm-publish@v3.1.1
       with:
