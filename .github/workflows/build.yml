@@ -34,17 +34,13 @@ jobs:
       packages: write
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-        registry-url: https://npm.pkg.github.com/
     - name: Download dists
       uses: actions/download-artifact@v4
       with:
         name: clang
         path: pkg/dist
-    - run: |
-        cd pkg
-        npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - uses: JS-DevTools/npm-publish@v3.1.1
+      with:
+        token: ${{secrets.GITHUB_TOKEN}}
+        registry: "https://npm.pkg.github.com/"
+        package: pkg
