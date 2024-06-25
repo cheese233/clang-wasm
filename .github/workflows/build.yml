@@ -20,6 +20,8 @@ jobs:
           cd emsdk
           ./emsdk install latest
           ./emsdk activate latest
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
       - name: make
         run: |
           source ./emsdk/emsdk_env.sh
