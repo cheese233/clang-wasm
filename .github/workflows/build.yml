@@ -5,29 +5,40 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: prepare
-      run: |
-        sudo apt update
-        sudo apt install -y ninja-build
-        git clone https://github.com/emscripten-core/emsdk.git
-        cd emsdk
-        ./emsdk install latest
-        ./emsdk activate latest
-    - name: make
-      run: |
-        source ./emsdk/emsdk_env.sh
-        ./build.sh
-    - name: Archive dists
-      uses: actions/upload-artifact@v4
-      with:
-        name: clang
-        path: pkg/dist
+  builds:
+      strategy:
+        matrix:
+          build_package: [clangd, clang]
+      runs-on: ubuntu-20.04
+      steps:
+      - uses: actions/checkout@v4
+      - name: Set Swap Space
+        uses: pierotofy/set-swap-space@master
+        with:
+          swap-size-gb: 8
+      - name: prepare
+        run: |
+          sudo apt update
+          sudo apt install -y ninja-build
+          git clone https://github.com/emscripten-core/emsdk.git
+          cd emsdk
+          ./emsdk install latest
+          ./emsdk activate latest
+      - name: ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 250M
+      - name: make
+        run: |
+          source ./emsdk/emsdk_env.sh
+          ./build.sh ${{ matrix.build_package }}
+      - name: Archive dists
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.build_package }}
+          path: pkg/dist
   publish:
-    needs: build
+    needs: builds
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -37,7 +48,6 @@ jobs:
     - name: Download dists
       uses: actions/download-artifact@v4
       with:
-        name: clang
         path: pkg/dist
     - uses: JS-DevTools/npm-publish@v3.1.1
       with:
