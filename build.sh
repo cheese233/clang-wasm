@@ -55,9 +55,9 @@ if [ "$1" == "prepare" ]; then
         -DLLVM_TABLEGEN=$LLVM_NATIVE/bin/llvm-tblgen \
         -DCLANG_TABLEGEN=$LLVM_NATIVE/bin/clang-tblgen
 elif [ "$1" == "clangd" ]; then
-    cmake --build $LLVM_BUILD --target clangd
+    cmake --build $LLVM_BUILD --target clangd -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
 elif [ "$1" == "clang" ]; then
-    cmake --build $LLVM_BUILD --target clang
+    cmake --build $LLVM_BUILD --target clang -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
 fi
 
 rm -rf pkg/dist
