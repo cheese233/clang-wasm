@@ -25,7 +25,7 @@ if [ ! -d $LLVM_NATIVE/ ]; then
         -DLLVM_ENABLE_PROJECTS="lld;clang"
 fi
 cmake --build $LLVM_NATIVE -- llvm-tblgen clang-tblgen
-if ["$1" == "prepare" ]; then
+if [ "$1" == "prepare" ]; then
     CXXFLAGS="-Dwait4=__syscall_wait4 -pthread" \
     LDFLAGS="\
         -s LLD_REPORT_UNDEFINED=1 \
