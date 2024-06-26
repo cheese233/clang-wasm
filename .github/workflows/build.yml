@@ -57,7 +57,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: prepare-llvm
-          path: project.tar.zst
+          merge-multiple: true
       - run: |
           tar --zstd -xf project.tar.zst
           rm project.tar.zst
