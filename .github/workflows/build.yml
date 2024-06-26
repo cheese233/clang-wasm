@@ -25,17 +25,18 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 500M
+          key: llvm
       - name: make
         run: |
           source ./emsdk/emsdk_env.sh
           ./build.sh prepare
-      - name: pack
-        run: tar --posix -cf build.tzst -P -c build --use-compress-program zstdmt
-      - name: Archive dists
+      - run: tar -c . | zstd -T0 -c > project.tar.zst
+      - name: Archive builds
         uses: actions/upload-artifact@v4
         with:
-          name: build-llvm
-          path: build.tzst
+          retention-days: 1
+          name: prepare-llvm
+          path: project.tar.zst
   builds:
       needs: build-llvm
       strategy:
@@ -47,25 +48,24 @@ jobs:
       - name: Set Swap Space
         uses: pierotofy/set-swap-space@master
         with:
-          swap-size-gb: 8
+          swap-size-gb: 10
       - name: prepare
         run: |
           sudo apt update
           sudo apt install -y ninja-build
-          git clone https://github.com/emscripten-core/emsdk.git
-          cd emsdk
-          ./emsdk install latest
-          ./emsdk activate latest
+      - name: Download prepares
+        uses: actions/download-artifact@v4
+        with:
+          name: prepare-llvm
+          merge-multiple: true
+      - run: |
+          tar --zstd -xf project.tar.zst
+          rm project.tar.zst
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 500M
-      - name: Download builds
-        uses: actions/download-artifact@v4
-        with:
-          name: build-llvm
-          path: build.tzst
-      - run: tar -xf build.tzst -P -C . --use-compress-program unzstd
+          key: ${{ matrix.build_package }}
       - name: make
         run: |
           source ./emsdk/emsdk_env.sh
@@ -88,6 +88,7 @@ jobs:
       with:
         pattern: out-*
         path: pkg/dist
+        merge-multiple: true
     - uses: JS-DevTools/npm-publish@v3.1.1
       with:
         token: ${{secrets.GITHUB_TOKEN}}
