@@ -38,6 +38,8 @@ if [ "$1" == "prepare" ]; then
         -s MODULARIZE \
         -s EXPORT_NAME="createModule" \
         -s ASYNCIFY \
+        -s EXPORT_ES6=1 \
+        -s MALLOC=dlmalloc \
         -s ENVIRONMENT=web,worker \
     " emcmake cmake -G Ninja \
         -S $LLVM_SRC/llvm/ \
