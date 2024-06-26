@@ -7,26 +7,26 @@ LLVM_SRC=$TOP_LEVEL/llvm-project
 LLVM_BUILD=$TOP_LEVEL/build
 LLVM_NATIVE=$TOP_LEVEL/build-native
 
-
-if [ ! -d $LLVM_SRC/ ]; then 
-    git clone https://github.com/llvm/llvm-project --depth=1 "$LLVM_SRC" --branch "llvmorg-15.0.7" --single-branch
-        
-    pushd $LLVM_SRC
-    git apply $TOP_LEVEL/llvm-project.patch
-    popd
-fi
-
-if [ ! -d $LLVM_NATIVE/ ]; then
-    cmake -G Ninja \
-        -S $LLVM_SRC/llvm/ \
-        -B $LLVM_NATIVE/ \
-        -DLLVM_CCACHE_BUILD=ON \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DLLVM_TARGETS_TO_BUILD=WebAssembly \
-        -DLLVM_ENABLE_PROJECTS="lld;clang"
-fi
-cmake --build $LLVM_NATIVE -- llvm-tblgen clang-tblgen
 if [ "$1" == "prepare" ]; then
+
+    if [ ! -d $LLVM_SRC/ ]; then 
+        git clone https://github.com/llvm/llvm-project --depth=1 "$LLVM_SRC" --branch "llvmorg-15.0.7" --single-branch
+            
+        pushd $LLVM_SRC
+        git apply $TOP_LEVEL/llvm-project.patch
+        popd
+    fi
+
+    if [ ! -d $LLVM_NATIVE/ ]; then
+        cmake -G Ninja \
+            -S $LLVM_SRC/llvm/ \
+            -B $LLVM_NATIVE/ \
+            -DLLVM_CCACHE_BUILD=ON \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DLLVM_TARGETS_TO_BUILD=WebAssembly \
+            -DLLVM_ENABLE_PROJECTS="lld;clang"
+    fi
+    cmake --build $LLVM_NATIVE -- llvm-tblgen clang-tblgen
 
     CXXFLAGS="-Dwait4=__syscall_wait4 -pthread" \
     LDFLAGS="\

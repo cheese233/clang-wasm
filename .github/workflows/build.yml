@@ -34,8 +34,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           retention-days: 1
-          name: build-llvm
-          path: build
+          name: prepare-llvm
+          path: .
   builds:
       needs: build-llvm
       strategy:
@@ -52,20 +52,16 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y ninja-build
-          git clone https://github.com/emscripten-core/emsdk.git
-          cd emsdk
-          ./emsdk install latest
-          ./emsdk activate latest
+      - name: Download prepares
+        uses: actions/download-artifact@v4
+        with:
+          name: prepare-llvm
+          path: .
       - name: ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 500M
           key: ${{ matrix.build_package }}
-      - name: Download builds
-        uses: actions/download-artifact@v4
-        with:
-          name: build-llvm
-          path: build
       - name: make
         run: |
           source ./emsdk/emsdk_env.sh
