@@ -30,7 +30,7 @@ jobs:
         run: |
           source ./emsdk/emsdk_env.sh
           ./build.sh prepare
-      - run: tar -c . | zstd -T0 -c > project.tar.zst
+      - run: tar -c . --exclude=project.tar.zst | zstd -T0 -c > project.tar.zst
       - name: Archive builds
         uses: actions/upload-artifact@v4
         with:
