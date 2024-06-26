@@ -88,6 +88,7 @@ jobs:
       with:
         pattern: out-*
         path: pkg/dist
+        merge-multiple: true
     - uses: JS-DevTools/npm-publish@v3.1.1
       with:
         token: ${{secrets.GITHUB_TOKEN}}
