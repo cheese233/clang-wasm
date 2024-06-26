@@ -34,6 +34,7 @@ if [ "$1" == "prepare" ]; then
         -s ALLOW_MEMORY_GROWTH=1 \
         -s EXPORTED_FUNCTIONS=_main,_free,_malloc \
         -s EXPORTED_RUNTIME_METHODS=FS,ERRNO_CODES,allocateUTF8 \
+        -pthread \
         -s MODULARIZE \
         -s EXPORT_NAME="createModule" \
         -s ASYNCIFY \
@@ -41,7 +42,7 @@ if [ "$1" == "prepare" ]; then
     " emcmake cmake -G Ninja \
         -S $LLVM_SRC/llvm/ \
         -B $LLVM_BUILD/ \
-        -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache \
+        -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache -DLLVM_CCACHE_BUILD=ON \
         -DCMAKE_BUILD_TYPE=Release \
         -DLLVM_TARGETS_TO_BUILD="" \
         -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra" \
@@ -50,7 +51,7 @@ if [ "$1" == "prepare" ]; then
         -DLLVM_ENABLE_EXPENSIVE_CHECKS=OFF \
         -DLLVM_ENABLE_BACKTRACES=OFF \
         -DLLVM_BUILD_TOOLS=OFF \
-        -DLLVM_ENABLE_THREADS=OFF \
+        -DLLVM_ENABLE_THREADS=ON \
         -DLLVM_INCLUDE_TESTS=OFF \
         -DLLVM_BUILD_LLVM_DYLIB=OFF \
         -DLLVM_TABLEGEN=$LLVM_NATIVE/bin/llvm-tblgen \
