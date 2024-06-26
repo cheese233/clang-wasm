@@ -34,7 +34,7 @@ if [ "$1" == "prepare" ]; then
         -s ALLOW_MEMORY_GROWTH=1 \
         -s EXPORTED_FUNCTIONS=_main,_free,_malloc \
         -s EXPORTED_RUNTIME_METHODS=FS,ERRNO_CODES,allocateUTF8 \
-        -pthread \
+        # -pthread \
         -s MODULARIZE \
         -s EXPORT_NAME="createModule" \
         -s ASYNCIFY \
@@ -51,7 +51,8 @@ if [ "$1" == "prepare" ]; then
         -DLLVM_ENABLE_EXPENSIVE_CHECKS=OFF \
         -DLLVM_ENABLE_BACKTRACES=OFF \
         -DLLVM_BUILD_TOOLS=OFF \
-        -DLLVM_ENABLE_THREADS=ON \
+        # -DLLVM_ENABLE_THREADS=ON \
+        -DLLVM_ENABLE_THREADS=OFF \
         -DLLVM_INCLUDE_TESTS=OFF \
         -DLLVM_BUILD_LLVM_DYLIB=OFF \
         -DLLVM_TABLEGEN=$LLVM_NATIVE/bin/llvm-tblgen \
