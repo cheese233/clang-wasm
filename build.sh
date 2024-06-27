@@ -38,7 +38,6 @@ if [ "$1" == "prepare" ]; then
         -s MODULARIZE \
         -s EXPORT_NAME="createModule" \
         -s ASYNCIFY \
-        -s EXPORT_ES6=1 \
         -s MALLOC=emmalloc \
         -s ENVIRONMENT=web,worker \
     " emcmake cmake -G Ninja \
