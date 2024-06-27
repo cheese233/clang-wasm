@@ -29,7 +29,7 @@ if [ "$1" == "prepare" ]; then
     cmake --build $LLVM_NATIVE -- llvm-tblgen clang-tblgen
 
     CXXFLAGS="-Dwait4=__syscall_wait4 -pthread" \
-    LDFLAGS="-Os\
+    LDFLAGS="-Os \
         -s LLD_REPORT_UNDEFINED=1 \
         -s ALLOW_MEMORY_GROWTH=1 \
         -s EXPORTED_FUNCTIONS=_main,_free,_malloc \
