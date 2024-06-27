@@ -43,6 +43,7 @@ if [ "$1" == "prepare" ]; then
         -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 \
         -s ASYNCIFY \
         -s PTHREAD_POOL_SIZE='navigator.hardwareConcurrency' \
+        --no-heap-copy \
     " emcmake cmake -G Ninja \
         -S $LLVM_SRC/llvm/ \
         -B $LLVM_BUILD/ \
