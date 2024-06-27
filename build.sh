@@ -39,7 +39,7 @@ if [ "$1" == "prepare" ]; then
         -s EXPORT_NAME="createModule" \
         -s ASYNCIFY \
         -s EXPORT_ES6=1 \
-        -s MALLOC=mimalloc \
+        -s MALLOC=dlmalloc \
         -s PURE_WASI=true \
         -s ENVIRONMENT=web,worker \
     " emcmake cmake -G Ninja \
