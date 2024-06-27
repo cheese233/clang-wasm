@@ -41,6 +41,7 @@ if [ "$1" == "prepare" ]; then
         -s MALLOC=mimalloc \
         -s ENVIRONMENT=web,worker \
         -s ASSERTIONS \
+        -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 \
     " emcmake cmake -G Ninja \
         -S $LLVM_SRC/llvm/ \
         -B $LLVM_BUILD/ \
