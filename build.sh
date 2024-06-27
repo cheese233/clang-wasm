@@ -40,6 +40,7 @@ if [ "$1" == "prepare" ]; then
         -s ASYNCIFY \
         -s MALLOC=emmalloc \
         -s ENVIRONMENT=web,worker \
+        -s ASSERTIONS \
     " emcmake cmake -G Ninja \
         -S $LLVM_SRC/llvm/ \
         -B $LLVM_BUILD/ \
