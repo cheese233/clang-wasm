@@ -31,7 +31,7 @@ if [ "$1" == "prepare" ]; then
     CXXFLAGS="-Dwait4=__syscall_wait4 -pthread" \
     LDFLAGS="-Os \
         -s LLD_REPORT_UNDEFINED=1 \
-        -s ALLOW_MEMORY_GROWTH=1 \
+        -s INITIAL_MEMORY=2GB -s ALLOW_MEMORY_GROWTH -s MAXIMUM_MEMORY=4GB \
         -s EXPORTED_FUNCTIONS=_main,_free,_malloc \
         -s EXPORTED_RUNTIME_METHODS=FS,ERRNO_CODES,allocateUTF8 \
         -pthread \
@@ -40,8 +40,6 @@ if [ "$1" == "prepare" ]; then
         -s MALLOC=mimalloc \
         -s ENVIRONMENT=web,worker \
         -s ASSERTIONS \
-        -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 \
-        -s ASYNCIFY \
         -s PTHREAD_POOL_SIZE='navigator.hardwareConcurrency' \
         --no-heap-copy \
     " emcmake cmake -G Ninja \
@@ -59,6 +57,11 @@ if [ "$1" == "prepare" ]; then
         -DLLVM_ENABLE_THREADS=ON \
         -DLLVM_INCLUDE_TESTS=OFF \
         -DLLVM_BUILD_LLVM_DYLIB=OFF \
+        -DLLVM_ENABLE_UNWIND_TABLES=OFF \
+        -DLLVM_ENABLE_BINDINGS=OFF \
+        -DLLVM_BUILD_STATIC=ON \
+        -DCMAKE_SKIP_RPATH=ON -DCMAKE_SKIP_INSTALL_RPATH=ON \
+        -DLLVM_DEFAULT_TARGET_TRIPLE=wasm32-emscripten \ 
         -DLLVM_TABLEGEN=$LLVM_NATIVE/bin/llvm-tblgen \
         -DCLANG_TABLEGEN=$LLVM_NATIVE/bin/clang-tblgen
 elif [ "$1" == "clangd" ]; then
